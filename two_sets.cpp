@@ -7,7 +7,7 @@ int main(){
 	cin>>n;
 	ll sum = (n*(n+1))/2;
 	if(sum%2!=0){
-		cout<<"0";   0;
+		cout<<"0";
 	}
 	else{
 		sum/=2;
