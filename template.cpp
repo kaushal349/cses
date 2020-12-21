@@ -5,9 +5,10 @@ using namespace std;
 #define REPR(i,k,n) for (i = k; i >= n; --i)
 #define ll long long
 #define pb push_back
-#define mp make_pair
 #define mod 1e9+7
 #define present(c,x) ((c).find(x)!=(c).end())
+int dx[] = {-1,0,1,0};
+int dy[] = {0,1,0,-1};
 typedef vector<int> vi;
 typedef vector<ll> vll; 
 void solve();
