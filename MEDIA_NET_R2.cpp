@@ -12,20 +12,7 @@ int dy[] = {0,1,0,-1};
 typedef vector<int> vi;
 typedef vector<ll> vll; 
 void solve();
-map<int,int> mp;
-map<int,int> visited;
 // Driver Program 
-int brokenCalc(int X,int Y){
-	int ans = 0;
-        while (Y > X) {
-            ans++;
-            if (Y % 2 == 1)
-                Y++;
-            else
-                Y /= 2;
-        }
-        return ans + X - Y;
-}
 int main() 
 { 
 	ios_base::sync_with_stdio(false); 
@@ -50,8 +37,28 @@ int main()
 
 
 void solve(){
-	int n,m;
-	cin>>n>>m;
-	int ans = brokenCalc(n,m);
-	cout<<ans;
+	int n;
+	cin>>n;
+	int arr1[n], arr2[n];
+	int i,sp=0,fp=0,sum=0;
+	int mneg = -INT_MIN, minPos = INT_MAX;
+	rep(i,n){
+		cin>>arr1[i];
+		if(arr1[i] > 0) sum+=arr1[i],fp++,minPos = min(minPos,arr1[i]);
+		else mneg = max(mneg,arr1[i]);
+	}
+	rep(i,n){
+		cin>>arr2[i];
+		if(arr2[i] > 0) sp++;
+	}
+	if(sp%2 == fp%2){
+		cout<<sum; return;
+	}
+	// add 1
+	// if adding 1 we need to include 1 negative
+	if(minPos + mneg >=0 ){
+		cout<< sum+mneg; return;
+	}
+	// remove 1
+	else cout<< sum-minPos;
 }
