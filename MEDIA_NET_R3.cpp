@@ -20,10 +20,7 @@ int fxn(int n,int m){
 	if(mp[n]!=0) return mp[n];
 	if(visited[n]==1) return -1;
 	visited[n] = 1;
-	cerr<<"HI\n";
-	cerr<<"n: "<<n<<endl;
 	if(n<0){
-		cerr<<"n: "<<n<<endl;
 		if(m>=0) return mp[n] = -1;
 		else if(m>n){
 			// m==-2 and n==-5
@@ -102,7 +99,4 @@ void solve(){
 	cin>>n>>m;
 	int ans = fxn(n,m);
 	cout<<ans;
-	for(pair<int,int> pp: mp){
-		cerr<<pp.first<<"->"<<pp.second<<endl;
-	}
 }
