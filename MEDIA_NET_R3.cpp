@@ -10,68 +10,67 @@ using namespace std;
 int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
 typedef vector<int> vi;
-typedef vector<ll> vll;
+typedef vector<ll> vll; 
 void solve();
-// Driver Program 
 map<int,int> mp;
-int fxn(int n, int m){
-	cerr<<"n: "<<n<<" m: "<<m<<endl;
-	mp[n] = 1;
-	if(m==n) return 0;
-	if(n<0 && m>=0) return -1;
+map<int,int> visited;
+// Driver Program 
+int fxn(int n,int m){
+	if(n==m) return 0;
+	if(mp[n]!=0) return mp[n];
+	if(visited[n]==1) return -1;
+	visited[n] = 1;
+	cerr<<"HI\n";
+	cerr<<"n: "<<n<<endl;
 	if(n<0){
-		// m<0 case left
-		// handling negative cases too-----);
-		if(m>n){
-			// eg m=-1 and n=-3
-			return -1;
-		}	
+		cerr<<"n: "<<n<<endl;
+		if(m>=0) return mp[n] = -1;
+		else if(m>n){
+			// m==-2 and n==-5
+			return mp[n] = -1;
+		}
 		else{
-			// eg m=-3 and n=-1
+			// m=-5 and n=-2
 			if(2*n >= m) {
-				if(mp[2*n]==1) return -1;
-				return 1+fxn(2*n,m);	
+				int ans1 = fxn(2*n,m);
+				int ans2 = fxn(n-1,m);
+				if(ans1==-1 && ans2==-1) return mp[n]=-1;
+				if(ans1==-1 || ans2==-1){
+					if(ans1==-1) return mp[n] = 1+ans2;
+					else return mp[n] = 1+ans1;
+				}
+				return mp[n] = 1+min(ans1,ans2);
 			}
-			else {
-				if(mp[n-1]==1) return -1;
-				return 1+fxn(n-1,m);
-			}
+			else return mp[n] = 1 + fxn(2*n,m);
 		}
 	}
 	if(n==0){
-		if(m>0) return -1;
+		if(m>0) return mp[n] = -1;
 		else{
-			// m==n==0 already considered
-			// eg m==-2 and n==0
-			if(mp[n-1]==1) return -1;
-			return 1+fxn(n-1,m);
+			return mp[n] = 1+fxn(n-1,m);
 		}
 	}
 	else{
-		// n>0
-		if(m>n){
-			// eg m==2 and n==1
-			if(2*n <= m) {
-				int ans1,ans2;
-				if(mp[n-1]==1) ans1=-1;
-				else{
-					ans1 = 1+fxn(n-1,m);
-				}
-				if(mp[2*n]==1) ans2=-1;
-				else{
-					ans2 = 1+fxn(2*n,m);
-				}
-				if(ans1==-1 && ans2==-1) return -1;
-				if(ans1==-1 || ans2==-1){
-					if(ans1==-1) return ans2;
-					else return ans1;
-				}
-				return min(ans1,ans2);
-			}
+		if(m<=0){
+			// n=4 and m=-1 , m=0
+			return mp[n] = 1+fxn(n-1,m);
 		}
 		else{
-			// eg m==1 and n==2
-			return 1+fxn(n-1,m);
+			if(m>n){
+				// m=5 and n=2
+				int ans1 = fxn(2*n,m);
+				int ans2 = fxn(n-1,m);
+				if(ans1==-1 && ans2==-1) return mp[n]=-1;
+				if(ans1==-1 || ans2==-1){
+					if(ans1==-1) return mp[n] = 1+ans2;
+					else return mp[n] = 1+ans1;
+				}
+				return mp[n] = 1+min(ans1,ans2);
+			}
+			else{
+				// m=2 and n=5
+				return mp[n] = 1+fxn(n-1,m);
+			}
 		}
 	}
 }
@@ -87,7 +86,7 @@ int main()
 #endif 
   
     int t = 1; 
-    // /*is Single Test case?*/ cin >> t; 
+    // is Single Test case? cin >> t; 
     while (t--) { 
         solve(); 
         cout<<"\n";
@@ -103,4 +102,7 @@ void solve(){
 	cin>>n>>m;
 	int ans = fxn(n,m);
 	cout<<ans;
+	for(pair<int,int> pp: mp){
+		cerr<<pp.first<<"->"<<pp.second<<endl;
+	}
 }
