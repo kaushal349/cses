@@ -11,24 +11,49 @@ int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
 typedef vector<int> vi;
 typedef vector<ll> vll; 
-int n,m;
-vi g[100001];
+vector<pair<int,int> > g[100001];
+ll dp[100001][100];
 int visited[100001];
+int mxi = -1e9;
 void solve();
 // Driver Program 
-ll dfs(int root){
+int dfs(int root, int k){
 	visited[root] = true;
-	ll sum = 0;
-	ll cm = INT_MIN;
-	for(int child: g[root]){
-		if(visited[child]==0){
-			ll ts = dfs(child);
+	if(k<0) return -1e9;
+	if(dp[root][k]!=-1e9) return dp[root][k];
+	int cm1 = -1e9;
+	int cm2 = -1e9;
+	for(pair<int,int> child: g[root]){
+		int node = child.first, dist = child.second;
+		if(visited[node]==0){
+			int ts;
+			if(dist >= 0){
+				ts = dist + dfs(node,k);
+			}
+			else{
+				ts = dist + dfs(node,k);
+				int ts2 = -dist + dfs(node,k-1);
+				ts = max(ts,ts2);
+			}
+			cerr<<"node: "<<root<<"ts: "<<ts<<endl;
 			// dfs return max passing through that node
-			// without inversions right now
-			cm = max(ts,cm);
+			if(cm1==-1e9){
+				cm1 = max(ts,cm1);
+			}
+			else{
+				if(ts>cm1) {
+					cm2 = cm1;
+					cm1 = ts;
+				}
+				else cm2 = max(ts,cm2);
+			}
+			// cm = max(ts,cm);
+			mxi = max(mxi,max(cm1,max(cm2,cm1+cm2)));
 		}
 	}
-	return max(cm+root)
+	if(cm1==-1e9) cm1=0;
+	if(cm2==-1e9) cm2=0;
+	return dp[root][k] = max(cm1,cm2); // max distance from this node....
 }
 int main() 
 { 
@@ -42,7 +67,7 @@ int main()
 #endif 
   
     int t = 1; 
-    /*is Single Test case?*/ cin >> t; 
+    // /*is Single Test case?*/ cin >> t; 
     while (t--) { 
         solve(); 
         cout<<"\n";
@@ -54,14 +79,25 @@ int main()
 
 
 void solve(){
+	// memset(dp,-1e9,sizeof(dp));
+	for(int i=0;i<100001;i++){
+		for(int j=0;j<100;j++){
+			dp[i][j]=-1e9;
+			// cerr<<dp[i][j]<<" ";
+		}
+	}
+	// cout<<"HI\n";
+	int n,m;
 	cin>>n>>m;
 	int i;
 	rep(i,m){
-		int a,b;
-		cin>>a>>b;
-		g[a].pb(b);
+		int a,b,c;
+		cin>>a>>b>>c;
+		g[a].pb({b,c});
+		g[b].pb({a,c});
 	}
 	int root,k;
 	cin>>root>>k;
-	dfs(root);
+	dfs(root,k);
+	cout<<mxi;
 }

@@ -1,1 +1,8 @@
-time taken : 0 secs
+node: 1ts: 1
+node: 3ts: 2
+node: 6ts: -100
+node: 6ts: 208
+node: 3ts: 211
+node: 1ts: 216
+node: 1ts: 10
+time taken : 0.041 secs
